@@ -149,6 +149,14 @@ class Builder(object):
         self.flags = self.flags | re.IGNORECASE
         return self
 
+    def multiLine(self):
+        self.flags = self.flags | re.MULTILINE
+        return self
+
+    def allLazy(self):
+        self.regex.append(r'?') # FIXME: assert
+        return self
+
     def get(self, implode=r''):
         return implode.join(self.regex)
 
