@@ -26,6 +26,10 @@ class Builder(object):
         self.regex.append(r'[a-z]')
         return self
 
+    def uppercaseLetter(self):
+        self.regex.append(r'[A-Z]')
+        return self
+
     def anyCharacter(self):
         self.regex.append(r'[a-zA-Z0-9_]')
         return self
@@ -116,9 +120,16 @@ class Builder(object):
             self.compile()
         return self.compiled.split(string, self.flags)
 
-    def sub(self, string, count=0):
+    def sub(self, repl, string):
         if not self.compiled:
             self.compile()
-        return self.compiled.sub(string, count, self.flags)
+        return self.compiled.sub(repl, string, self.flags)
 
     replace = sub
+
+    def subn(self, repl, string):
+        if not self.compiled:
+            self.compile()
+        return self.compiled.subn(repl, string, self.flags)
+
+    filter = subn
