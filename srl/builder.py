@@ -105,14 +105,21 @@ class Builder(object):
         self.regex.append(r'(?:%s)' % regex)
         return self
 
-    def capture(self, conditions):
+    def capture(self, conditions, name=None):
         builder = Builder()
         subquery = conditions(builder)
         regex = subquery.get()
-        self.regex.append(r'(%s)' % regex)
+        if name:
+            self.regex.append(r'(?P<%s>%s)' % (name, regex))
+        else:
+            self.regex.append(r'(%s)' % regex)
         return self
 
     eitherOf = anyOf
+
+    def until(self, char):
+        self.regex.append(r'(?:%s)' % char)
+        return self
 
     def oneOf(self, chars):
         self.regex.append(r'[%s]' % chars)
