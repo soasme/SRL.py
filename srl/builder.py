@@ -26,6 +26,10 @@ class Builder(object):
         self.regex.append(r'[a-z]')
         return self
 
+    def noCharacter(self):
+        self.regex.append(r'[^a-zA-Z0-9_]')
+        return self
+
     def uppercaseLetter(self):
         self.regex.append(r'[A-Z]')
         return self
@@ -34,8 +38,24 @@ class Builder(object):
         self.regex.append(r'[a-zA-Z0-9_]')
         return self
 
+    def anything(self):
+        self.regex.append(r'.')
+        return self
+
+    def newLine(self):
+        self.regex.append(r'\n')
+        return self
+
     def whitespace(self):
         self.regex.append(r' ')
+        return self
+
+    def noWhitespace(self):
+        self.regex.append(r'[^ ]')
+        return self
+
+    def tab(self):
+        self.regex.append(r'\t')
         return self
 
     def raw(self, string):
