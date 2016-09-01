@@ -26,6 +26,10 @@ class Builder(object):
         self.regex.append(r'[a-z]')
         return self
 
+    def raw(self, string):
+        self.regex.append(string)
+        return self
+
     def between(self, start, end):
         self.regex.append(r'{%d,%d}' % (start, end))
         return self

@@ -34,3 +34,6 @@ def test_simple_email_format():
     assert not re.match(regex, 'hav ing@spac.es')
     assert not re.match(regex, 'no@pe.123')
     assert not re.match(regex, 'invalid@email.com123')
+
+def test_raw():
+    assert Builder().literally('foo').raw('b[a-z]r').is_valid()
