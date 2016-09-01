@@ -35,6 +35,9 @@ def test_simple_email_format():
     assert not re.match(regex, 'no@pe.123')
     assert not re.match(regex, 'invalid@email.com123')
 
+def test_capture_group():
+    raise NotImplementedError
+
 def test_replace():
     query = Builder().capture(lambda q: q.anyCharacter().onceOrMore()) \
             .whitespace().capture(lambda q: q.digit().onceOrMore()) \
