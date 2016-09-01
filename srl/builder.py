@@ -26,6 +26,10 @@ class Builder(object):
         self.regex.append(r'[a-z]')
         return self
 
+    def anyCharacter(self):
+        self.regex.append(r'[a-zA-Z0-9_]')
+        return self
+
     def whitespace(self):
         self.regex.append(r' ')
         return self
@@ -64,7 +68,14 @@ class Builder(object):
         builder = Builder()
         subquery = conditions(builder)
         regex = subquery.get(r'|')
-        self.regex.append('(?:%s)' % regex)
+        self.regex.append(r'(?:%s)' % regex)
+        return self
+
+    def capture(self, conditions):
+        builder = Builder()
+        subquery = conditions(builder)
+        regex = subquery.get()
+        self.regex.append(r'(%s)' % regex)
         return self
 
     eitherOf = anyOf
@@ -104,3 +115,10 @@ class Builder(object):
         if not self.compiled:
             self.compile()
         return self.compiled.split(string, self.flags)
+
+    def sub(self, string, count=0):
+        if not self.compiled:
+            self.compile()
+        return self.compiled.sub(string, count, self.flags)
+
+    replace = sub

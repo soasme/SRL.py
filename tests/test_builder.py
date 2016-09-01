@@ -35,6 +35,13 @@ def test_simple_email_format():
     assert not re.match(regex, 'no@pe.123')
     assert not re.match(regex, 'invalid@email.com123')
 
+def test_replace_callback():
+    query = Builder().capture(lambda q: q.anyCharacter().onceOrMore()) \
+            .whitespace().capture(lambda q: q.digit().onceOrMore()) \
+            .literally(', ').capture(lambda q: q.digit().onceOrMore()) \
+            .caseInsensitive()
+    assert query.replace(lambda params: 'invoked', 'April 15, 2003') == 'invoked'
+
 def test_laziness():
     regex = Builder().literally(',').twice().whitespace().optional().firstMatch()
     assert regex.split('sample,one,, two,,three') == ['sample,one', ' two', 'three']
