@@ -1,51 +1,36 @@
 # -*- coding: utf-8 -*-
 
-from operator import itemgetter
 import copy
 
 class Builder(object):
 
-    def __init__(self, name=None, parent=None, **kwargs):
-        self._name = name
-        self._parent = parent
+    def __init__(self):
+        self.regex = []
 
-    def _spawn(self, name):
-        child = copy.copy(self)
-        child._name = name
-        child._parent = self
-        return child
+    def literally(self, char):
+        if char in {'+', '\\'}:
+            char = '\\' + char
+        self.regex.append(r'%s' % char)
+        return self
 
-    def __getattr__(self, name):
-        if name.startswith('__'):
-            raise AttributeError(name)
-        return self._spawn(name)
+    def digit(self):
+        self.regex.append(r'\d')
+        return self
 
-    def __iter__(self):
-        current = self
-        while current:
-            if current._name:
-                yield current
-            current = current._parent
+    number = digit
 
-    def _chain(self, *args):
-        chain = self
-        for arg in args:
-            chain = chain._spawn(str(arg))
-        return chain
+    def between(self, start, end):
+        self.regex.append(r'{%d,%d}' % (start, end))
+        return self
 
-    def __call__(self, *args):
-        return self._chain(*args)
+    def onceOrMore(self):
+        self.regex.append(r'+')
+        return self
 
-    def _re(self, *args):
-        return ''.join(reversed(map(lambda i: i._name, self._chain(*args))))
+    def mustEnd(self):
+        self.regex.append(r'$')
+        return self
 
-    def __repr__(self):
-        return str(self._re())
+    def get(self):
+        return r''.join(self.regex)
 
-    def __str__(self):
-        return str(self._re())
-
-if __name__ == '__main__':
-    builder = Builder()
-    print str(builder.hello.world) == 'helloworld'
-    print str(builder.hello('world')) == 'helloworld'
