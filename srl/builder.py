@@ -26,6 +26,10 @@ class Builder(object):
         self.regex.append(r'[a-z]')
         return self
 
+    def whitespace(self):
+        self.regex.append(r' ')
+        return self
+
     def raw(self, string):
         self.regex.append(string)
         return self
@@ -36,6 +40,20 @@ class Builder(object):
 
     def onceOrMore(self):
         self.regex.append(r'+')
+        return self
+
+    def optional(self):
+        self.regex.append(r'?')
+        return self
+
+    def firstMatch(self):
+        self.regex.append(r'?')
+        return self
+
+    lazy = firstMatch
+
+    def twice(self):
+        self.regex.append(r'{2}')
         return self
 
     def atLeast(self, number):
@@ -81,3 +99,8 @@ class Builder(object):
         if not self.compiled:
             self.compile()
         return self.compiled.match(string, self.flags)
+
+    def split(self, string):
+        if not self.compiled:
+            self.compile()
+        return self.compiled.split(string, self.flags)
