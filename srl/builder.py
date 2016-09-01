@@ -70,6 +70,10 @@ class Builder(object):
         self.regex.append(r'+')
         return self
 
+    def neverOrMore(self):
+        self.regex.append(r'*')
+        return self
+
     def optional(self):
         self.regex.append(r'?')
         return self
@@ -80,12 +84,18 @@ class Builder(object):
 
     lazy = firstMatch
 
-    def twice(self):
-        self.regex.append(r'{2}')
+    def exactly(self, count):
+        self.regex.append(r'{%d}' % count)
         return self
 
+    def once(self):
+        return self.exactly(1)
+
+    def twice(self):
+        return self.exactly(2)
+
     def atLeast(self, number):
-        self.regex.append(r'{%d,}?' % number)
+        self.regex.append(r'{%d,}' % number)
         return self
 
     def anyOf(self, conditions):
