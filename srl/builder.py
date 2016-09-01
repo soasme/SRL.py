@@ -141,6 +141,12 @@ class Builder(object):
         self.regex.append(r'(?<!%s)' % conditions)
         return self
 
+    def beginWith(self):
+        self.regex.append(r'^') # FIXME: assert
+        return self
+
+    startWith = beginWith
+
     def mustEnd(self):
         self.regex.append(r'$')
         return self
