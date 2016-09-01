@@ -35,6 +35,13 @@ def test_simple_email_format():
     assert not re.match(regex, 'no@pe.123')
     assert not re.match(regex, 'invalid@email.com123')
 
+def test_replace():
+    query = Builder().capture(lambda q: q.anyCharacter().onceOrMore()) \
+            .whitespace().capture(lambda q: q.digit().onceOrMore()) \
+            .literally(', ').capture(lambda q: q.digit().onceOrMore()) \
+            .caseInsensitive()
+    assert query.replace(r'\1 1, \3', 'April 15, 2003') == 'April 1, 2003'
+
 def test_filter():
     query = Builder().capture(lambda q: q.uppercaseLetter())
     assert query.filter(r'A:\g<0>', 'a1AB') == ('a1A:AA:B', 2)
