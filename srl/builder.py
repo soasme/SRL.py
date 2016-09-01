@@ -125,6 +125,14 @@ class Builder(object):
         self.regex.append(r'[%s]' % chars)
         return self
 
+    def ifFollowedBy(self, conditions):
+        self.regex.append(r'(?%s)' % conditions)
+        return self
+
+    def ifNotFollowedBy(self, conditions):
+        self.regex.append(r'(?!%s)' % conditions)
+        return self
+
     def mustEnd(self):
         self.regex.append(r'$')
         return self
