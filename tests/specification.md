@@ -204,3 +204,24 @@ Sometimes, you may want to enforce a specific part of a regular expression. You 
     (?:an)\s[a-zA-Z]
     >>> query.is_matching('an Example')
     True
+
+## Quantifiers
+
+Quantifiers are probably one of the most important things here. If you've specified a character or a group in you query and now want to multiply it, you don't have to copy and paste all of it. Just tell them.
+
+Oh, and don't be confused. Sometimes, you may find that these quantifiers don't match with the tinkered example. That's okay, since we're not forcing the string to start or end. Thus, even if only parts of that string are matching, the expression will be valid.
+
+### exactly x times
+
+    exactly x times
+
+You're sure. You don't guess, you dictate. `exactly 4 times`. Not more, not less. The statement before has to match exactly x times.
+
+Note: since `exactly x times` is pretty much to write, short terms exist. Instead of `exactly 1 time`, you can write `once`, and for 2, take `twice`.
+
+    >>> builder = Builder()
+    >>> query = builder.digit().exactly(3).letter().twice()
+    >>> print query.get()
+    [0-9]{3}[a-z]{2}
+    >>> query.is_matching('123ab')
+    True
