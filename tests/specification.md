@@ -32,7 +32,7 @@ SRL Builder:
 
     >>> from srl.builder import Builder
     >>> builder = Builder()
-    >>> query = builder.letterFromTo('a', 'f').exactly(4)
+    >>> query = builder.letter('a', 'f').exactly(4)
     >>> print query.get()
     [a-f]{4}
     >>> query.is_matching('abcd')
@@ -68,4 +68,21 @@ The `literally` character allows you to pass a string to the query that will be 
     >>> query.is_matching('%')
     True
     >>> query.is_matching('$')
+    False
+
+### letter
+
+    letter [from a to z]
+
+This will help you to match a letter between a specific span, if the exact word isn't known. If you know you're expecting an letter, then go for it. If not supplying anything, a normal letter between a and z will be matched. Of course, you can define a span, using the `from x to y` syntax.
+
+Please note, that this will only match one letter. If you expect more than one letter, use a quantifier.
+
+    >>> builder = Builder()
+    >>> query = builder.letter('a', 'f')
+    >>> print query.get()
+    [a-f]
+    >>> query.is_matching('a')
+    True
+    >>> query.is_matching('z')
     False

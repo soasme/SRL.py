@@ -22,11 +22,7 @@ class Builder(object):
 
     number = digit
 
-    def letter(self):
-        self.regex.append(r'[a-z]')
-        return self
-
-    def letterFromTo(self, start, end):
+    def letter(self, start='a', end='z'):
         self.regex.append(r'[%s-%s]' % (start, end))
         return self
 
