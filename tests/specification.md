@@ -357,3 +357,18 @@ This can be done using lookahead. In SRL, a lookahead can be positive (if follow
     ([0-9])(?!.+[0-9])
     >>> query.getMatches('This example contains 3 numbers. 2 should not match. Only 1 should.')
     ['1']
+
+### if already had / if not already had
+
+    if [not] already had
+
+Just like a lookahead, the lookbehind, which can be positive and negative as well, matches the characters exactly before that condition.
+
+For example, you may only want to match bar if it's directly following foo:
+
+    >>> builder = Builder()
+    >>> query = builder.capture('bar').ifAlreadyHad('foo')
+    >>> print query.get()
+    (?<=(?:foo))((?:bar))
+    >>> query.getMatches('foobar')
+    ['bar']

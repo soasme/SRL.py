@@ -156,11 +156,19 @@ class Builder(object):
         return self.addClosure(builder, conditions)
 
     def ifAlreadyHad(self, conditions):
-        self.regex.append(r'(?<=%s)' % conditions)
+        builder = Builder()
+        builder.group = r'(?<=%s)'
+        previous_cond = self.revertLast()
+        self.addClosure(builder, conditions)
+        self.regex.append(previous_cond)
         return self
 
     def ifNotAlreadyHad(self, conditions):
-        self.regex.append(r'(?<!%s)' % conditions)
+        builder = Builder()
+        builder.group = r'(?<!%s)'
+        previous_cond = self.revertLast()
+        self.addClosure(builder, conditions)
+        self.regex.append(previous_cond)
         return self
 
     def beginWith(self):
