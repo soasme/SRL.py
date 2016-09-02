@@ -38,3 +38,17 @@ SRL Builder:
     >>> query.is_matching('abcd')
     True
 
+Okay, let's dive into the different characters. Below, you can find a list of all available characters along with an example query.
+
+### literally
+
+    literally "string"
+
+The `literally` character allows you to pass a string to the query that will be interpreted as exactly what you've requested. Nothing else will match, besides your string. Any special character will automatically be escaped. The sample code matches, since the test string contains "sample". Try removing it.
+
+    >>> builder = Builder()
+    >>> query = builder.literally("sample")
+    >>> print query.get()
+    (?:sample)
+    >>> query.findall('this is a sample')
+    ['sample']

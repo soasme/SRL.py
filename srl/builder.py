@@ -13,7 +13,7 @@ class Builder(object):
     def literally(self, char):
         if char in {'+', '\\'}:
             char = '\\' + char
-        self.regex.append(r'%s' % char)
+        self.regex.append(r'(?:%s)' % char)
         return self
 
     def digit(self):
@@ -185,6 +185,21 @@ class Builder(object):
         if not self.compiled:
             self.compile()
         return bool(self.compiled.match(string, self.flags))
+
+    def match(self, string):
+        if not self.compiled:
+            self.compile()
+        return self.compiled.match(string, self.flags)
+
+    def getMatches(self, string):
+        match = self.search(string)
+        if match:
+            return list(match.groups())
+
+    def findall(self, string):
+        if not self.compiled:
+            self.compile()
+        return self.compiled.findall(string, self.flags)
 
     def split(self, string):
         if not self.compiled:
