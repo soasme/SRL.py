@@ -176,3 +176,18 @@ This matches any whitespace character. This includes a space, tab or new line. I
     \S
     >>> query.is_matching('y')
     True
+
+### tab
+
+    tab
+
+If you want to match tabs, but no other whitespace characters, this might be for you. It will only match the tab character, and nothing else.
+
+    >>> builder = Builder()
+    >>> query = builder.tab()
+    >>> print query.get()
+    \t
+    >>> query.is_matching('\t')
+    True
+    >>> not query.is_matching('    ')
+    True
