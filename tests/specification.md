@@ -225,3 +225,20 @@ Note: since `exactly x times` is pretty much to write, short terms exist. Instea
     [0-9]{3}[a-z]{2}
     >>> query.is_matching('123ab')
     True
+
+### between x and y times
+
+    between x and y times
+
+For a specific number of repetitions between a span of x to y, you may use this quantifier. It will make sure the previous character exists between x and y times.
+
+Note: since `between x and y times` is pretty much to write, you can get rid of the times: `between 1 and 5`
+
+    >>> builder = Builder()
+    >>> query = builder.startWith().digit().between(3, 5).letter().twice()
+    >>> print query.get()
+    ^[0-9]{3,5}[a-z]{2}
+    >>> query.is_matching('1234ab')
+    True
+
+
