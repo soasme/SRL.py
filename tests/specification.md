@@ -267,4 +267,17 @@ If something has to exist at least once, or never, but if it does, then it may e
     >>> query.is_matching('abcdefghijklmnopqrstuvwxyz')
     True
 
+### at least x times
 
+    at least x times
+
+Something may exist in an infinite length, but must exist at least x times.
+
+    >>> builder = Builder()
+    >>> query = builder.letter().atLeast(10)
+    >>> print query.get()
+    [a-z]{10,}
+    >>> query.is_matching('invalid')
+    False
+    >>> query.is_matching('nowthisisvalid')
+    True
