@@ -281,3 +281,26 @@ Something may exist in an infinite length, but must exist at least x times.
     False
     >>> query.is_matching('nowthisisvalid')
     True
+
+## Groups
+
+Groups are a powerful tool of regular expressions. You can capture matches, join or summarize them.
+
+To make things easier for you, think of groups as sub-queries. Everything in between a group could be a standalone expression which will later be combined.
+
+Every group allows you to supply either a sub-query using parentheses, or just a literal string using quotes instead.
+
+### capture ... as
+
+    capture (condition) [as "name"]
+
+To go beyond simply validating input, a capture group comes in handy. You can capture any condition and return it by the engine. This helps you to filter inputs and only get the parts you care about.
+
+If you're trying to get more than one match, capture names are useful, too. This is completely optional, but you can supply a name for a capture group using the as "name" syntax.
+
+    >>> builder = Builder()
+    >>> query = builder.capture(lambda q: q.anything().onceOrMore(), 'first').literally(' - ').capture('second part', 'second')
+    >>> print query.get()
+    (?P<first>.+)(?: - )(?P<second>(?:second part))
+    >>> query.is_matching('first part - second part')
+    True

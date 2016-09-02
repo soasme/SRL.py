@@ -107,8 +107,16 @@ class Builder(object):
 
     def capture(self, conditions, name=None):
         builder = Builder()
-        subquery = conditions(builder)
+
+        if isinstance(conditions, basestring):
+            subquery = builder.literally(conditions)
+        elif callable(conditions):
+            subquery = conditions(builder)
+        else:
+            assert False, 'invalid conditions for capture'
+
         regex = subquery.get()
+
         if name:
             self.regex.append(r'(?P<%s>%s)' % (name, regex))
         else:
