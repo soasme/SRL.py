@@ -5,10 +5,11 @@ import copy
 
 class Builder(object):
 
-    def __init__(self):
-        self.regex = []
-        self.flags = 0
+    def __init__(self, regex=None, flags=0, group='%s'):
+        self.regex = regex or []
+        self.flags = flags or 0
         self.compiled = None
+        self.group = group or '%s'
 
     def literally(self, char):
         if char in {'+', '\\'}:
@@ -98,30 +99,29 @@ class Builder(object):
         self.regex.append(r'{%d,}' % number)
         return self
 
-    def anyOf(self, conditions):
-        builder = Builder()
-        subquery = conditions(builder)
-        regex = subquery.get(r'|')
-        self.regex.append(r'(?:%s)' % regex)
-        return self
-
-    def capture(self, conditions, name=None):
-        builder = Builder()
-
+    def addClosure(self, builder, conditions, exploder=''):
         if isinstance(conditions, basestring):
             subquery = builder.literally(conditions)
         elif callable(conditions):
             subquery = conditions(builder)
         else:
-            assert False, 'invalid conditions for capture'
+            subquery = builder.raw(conditions.get())
 
-        regex = subquery.get()
-
-        if name:
-            self.regex.append(r'(?P<%s>%s)' % (name, regex))
-        else:
-            self.regex.append(r'(%s)' % regex)
+        self.regex.append(subquery.get(exploder))
         return self
+
+    def capture(self, conditions, name=None):
+        builder = Builder()
+        if name:
+            builder.group = '(?P<%s>%%s)' % name
+        else:
+            builder.group = '(%s)'
+        return self.addClosure(builder, conditions)
+
+    def anyOf(self, conditions):
+        builder = Builder()
+        builder.group = '(?:%s)'
+        return self.addClosure(builder, conditions, r'|')
 
     eitherOf = anyOf
 
@@ -171,8 +171,16 @@ class Builder(object):
         self.regex.append(r'?') # FIXME: assert
         return self
 
+    def revertLast(self):
+        self.regex.pop()
+        return self
+
+    def __and__(self, conditions):
+        builder = Builder(group=self.group)
+        return self.addClosure(builder, conditions)
+
     def get(self, implode=r''):
-        return implode.join(self.regex)
+        return self.group % implode.join(self.regex)
 
     def compile(self):
         self.compiled = re.compile(self.get(), self.flags)

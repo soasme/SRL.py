@@ -307,4 +307,21 @@ If you're trying to get more than one match, capture names are useful, too. This
     >>> query.getMatches('first part - second part')
     ['first part', 'second part']
 
-### 
+### any of
+
+    any of (condition)
+
+If you're not exactly sure which part of the condition will match, use any of. Every statement you supply in that sub-query, could be a match.
+
+As you can see, you can feel free to nest multiple groups and even parentheses. If you would have removed the parentheses around the `digit once or more`, the expression would be invalid, since you can't match either a digit, or "once or more".
+
+Note: `either of` is a synonym of `any of`.
+
+    >>> builder = Builder()
+    >>> query = builder.capture(lambda q: q.anyOf(lambda q: q.literally('sample') & (lambda q: q.digit().onceOrMore())))
+    >>> print query.get()
+    ((?:(?:sample)|(?:[0-9]+)))
+    >>> query.is_matching('sample')
+    True
+    >>> query.is_matching('1234')
+    True
