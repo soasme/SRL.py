@@ -241,4 +241,15 @@ Note: since `between x and y times` is pretty much to write, you can get rid of 
     >>> query.is_matching('1234ab')
     True
 
+### optional
 
+    optional
+
+You can't always be sure that something exists. Sometimes it's okay if something is missing. In that case, the optional quantifier comes in handy. It will match, if it's there, and ignore it, if it's missing.
+
+    >>> builder = Builder()
+    >>> query = builder.digit().optional().letter().twice()
+    >>> print query.get()
+    [0-9]?[a-z]{2}
+    >>> query.is_matching('ab')
+    True
