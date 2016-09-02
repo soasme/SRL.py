@@ -131,3 +131,18 @@ Note: `number` is an alias for `digit`.
     False
     >>> query.is_matching('56')
     True
+
+### anything
+
+    anything
+
+Any character whatsoever. Well.. except for line breaks. This will match any character, except new lines. And, of course, only once. So don't forget to apply a quantifier, if necessary.
+
+    >>> builder = Builder()
+    >>> query = builder.anything()
+    >>> print query.get()
+    .
+    >>> query.is_matching('a')
+    True
+    >>> query.is_matching('\n')
+    False
