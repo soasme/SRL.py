@@ -159,3 +159,20 @@ Match a new line.
     \n
     >>> query.is_matching('\n')
     True
+
+### [no] whitespace
+
+    [no] whitespace
+
+This matches any whitespace character. This includes a space, tab or new line. If using no whitespace everything except a whitespace character will match.
+
+    >>> query = Builder().whitespace()
+    >>> print query.get()
+    \s
+    >>> query.is_matching(' ')
+    True
+    >>> query = Builder().noWhitespace()
+    >>> print query.get()
+    \S
+    >>> query.is_matching('y')
+    True

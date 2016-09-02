@@ -47,11 +47,11 @@ class Builder(object):
         return self
 
     def whitespace(self):
-        self.regex.append(r' ')
+        self.regex.append(r'\s')
         return self
 
     def noWhitespace(self):
-        self.regex.append(r'[^ ]')
+        self.regex.append(r'\S')
         return self
 
     def tab(self):
