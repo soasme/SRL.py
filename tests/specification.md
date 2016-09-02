@@ -146,3 +146,16 @@ Any character whatsoever. Well.. except for line breaks. This will match any cha
     True
     >>> query.is_matching('\n')
     False
+
+### new line
+
+    new line
+
+Match a new line.
+
+    >>> builder = Builder()
+    >>> query = builder.newLine()
+    >>> print query.get()
+    \n
+    >>> query.is_matching('\n')
+    True
