@@ -325,3 +325,20 @@ Note: `either of` is a synonym of `any of`.
     True
     >>> query.is_matching('1234')
     True
+
+### until
+
+    until (condition)
+
+Sometimes you want to match or capture a specific expression until some other condition meets. This can be achieved using the until group.
+
+In the example below, we'll provide a string as a condition. However, this would work as well using a more complex expression, just like above.
+
+    >>> builder = Builder()
+    >>> query = builder.beginWith().capture(lambda q: q.anything().onceOrMore()).until('m')
+    >>> print query.get()
+    ^(.+?)(?:m)
+    >>> query.is_matching('this is an exam')
+    True
+    >>> query.is_matching('this is an example')
+    True

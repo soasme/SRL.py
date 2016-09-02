@@ -3,6 +3,8 @@
 import re
 import copy
 
+class LazyError(Exception): pass
+
 class Builder(object):
 
     def __init__(self, regex=None, flags=0, group='%s'):
@@ -80,8 +82,14 @@ class Builder(object):
         return self
 
     def firstMatch(self):
-        self.regex.append(r'?')
-        return self
+        if self.get()[-1] not in '+*}?':
+            if self.regex[-1][-1] == ')' and self.get()[-2] in '+*}?':
+                self.regex.append(self.revertLast()[0:-1] + '?)')
+                return self
+            raise LazyError('Cannot apply laziness at this point. Only applicable after quantifiers.')
+        else:
+            self.regex.append(r'?')
+            return self
 
     lazy = firstMatch
 
@@ -125,9 +133,13 @@ class Builder(object):
 
     eitherOf = anyOf
 
-    def until(self, char):
-        self.regex.append(r'(?:%s)' % char)
-        return self
+    def until(self, conditions):
+        try:
+            self.lazy()
+        except LazyError:
+            pass
+        builder = Builder()
+        return self.addClosure(builder, conditions)
 
     def oneOf(self, chars):
         self.regex.append(r'[%s]' % chars)
@@ -172,8 +184,7 @@ class Builder(object):
         return self
 
     def revertLast(self):
-        self.regex.pop()
-        return self
+        return self.regex.pop()
 
     def __and__(self, conditions):
         builder = Builder(group=self.group)
