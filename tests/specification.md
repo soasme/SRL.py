@@ -100,7 +100,7 @@ Just like a letter, `any character` matches anything between A to Z, 0 to 9 and 
     >>> query.is_matching('aBcD0_1')
     True
 
-no character
+### no character
 
     no character
 
@@ -114,3 +114,20 @@ The inverse to the any character-character is no character. This will match ever
     True
     >>> query.is_matching('azAZ09_')
     False
+
+### digit
+
+    digit [from 0 to 9]
+
+When expecting a digit, but not a specific one, this comes in handy. Each digit matches only one digit, meaning you can only match digit from 0 to 9, but multiple times using a quantifier. Obviously, limiting the digit isn't a problem either. So if you're searching for a number from 5 to 7, go for it!
+
+Note: `number` is an alias for `digit`.
+
+    >>> builder = Builder()
+    >>> query = builder.startWith().digit(5, 7).exactly(2).mustEnd()
+    >>> print query.get()
+    ^[5-7]{2}$
+    >>> query.is_matching('42')
+    False
+    >>> query.is_matching('56')
+    True

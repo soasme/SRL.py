@@ -16,8 +16,8 @@ class Builder(object):
         self.regex.append(r'(?:%s)' % char)
         return self
 
-    def digit(self):
-        self.regex.append(r'[0-9]')
+    def digit(self, start='0', end='9'):
+        self.regex.append(r'[%s-%s]' % (start, end))
         return self
 
     number = digit
