@@ -253,3 +253,18 @@ You can't always be sure that something exists. Sometimes it's okay if something
     [0-9]?[a-z]{2}
     >>> query.is_matching('ab')
     True
+
+### once/never or more
+
+    once/never or more
+
+If something has to exist at least once, or never, but if it does, then it may exist multiple times, the quantifiers `once or more` and `never or more` will do the job.
+
+    >>> builder = Builder()
+    >>> query = builder.startWith().letter().onceOrMore().mustEnd()
+    >>> print query.get()
+    ^[a-z]+$
+    >>> query.is_matching('abcdefghijklmnopqrstuvwxyz')
+    True
+
+
