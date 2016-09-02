@@ -54,3 +54,18 @@ The `literally` character allows you to pass a string to the query that will be 
     ['sample']
     >>> query.findall('this is a maplecady')
     []
+
+### one of
+
+    one of "characters"
+
+`literally` comes in handy if the string is known. But if there is a unknown string which may only contain certain characters, using `one of` makes much more sense. This will match one of the supplied characters.
+
+    >>> builder = Builder()
+    >>> query = builder.oneOf('a%1')
+    >>> print query.get()
+    [a%1]
+    >>> query.is_matching('%')
+    True
+    >>> query.is_matching('$')
+    False
