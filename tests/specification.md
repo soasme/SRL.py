@@ -342,3 +342,18 @@ In the example below, we'll provide a string as a condition. However, this would
     True
     >>> query.is_matching('this is an example')
     True
+
+### if followed by / if not followed by
+
+    if [not] followed by
+
+Sometimes, you may only want to match a certain condition if it is directly followed by a given other condition.
+
+This can be done using lookahead. In SRL, a lookahead can be positive (if followed by) or negative (if not followed by). The example below will only capture the number, if it's no more followed by any other number.
+
+    >>> builder = Builder()
+    >>> query = builder.capture(lambda q: q.digit()).ifNotFollowedBy(lambda q: q.anything().onceOrMore().digit())
+    >>> print query.get()
+    ([0-9])(?!.+[0-9])
+    >>> query.getMatches('This example contains 3 numbers. 2 should not match. Only 1 should.')
+    ['1']

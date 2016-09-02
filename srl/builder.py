@@ -146,12 +146,14 @@ class Builder(object):
         return self
 
     def ifFollowedBy(self, conditions):
-        self.regex.append(r'(?%s)' % conditions)
-        return self
+        builder = Builder()
+        builder.group = r'(?=%s)'
+        return self.addClosure(builder, conditions)
 
     def ifNotFollowedBy(self, conditions):
-        self.regex.append(r'(?!%s)' % conditions)
-        return self
+        builder = Builder()
+        builder.group = r'(?!%s)'
+        return self.addClosure(builder, conditions)
 
     def ifAlreadyHad(self, conditions):
         self.regex.append(r'(?<=%s)' % conditions)
