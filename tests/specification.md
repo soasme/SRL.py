@@ -86,3 +86,16 @@ Please note, that this will only match one letter. If you expect more than one l
     True
     >>> query.is_matching('z')
     False
+
+### any character
+
+    any character
+
+Just like a letter, `any character` matches anything between A to Z, 0 to 9 and `_`, case insensitive. This way you can validate if someone for example entered a valid username.
+
+    >>> builder = Builder()
+    >>> query = builder.startWith().anyCharacter().onceOrMore().mustEnd()
+    >>> print query.get()
+    ^\w+$
+    >>> query.is_matching('aBcD0_1')
+    True

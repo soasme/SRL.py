@@ -35,7 +35,7 @@ class Builder(object):
         return self
 
     def anyCharacter(self):
-        self.regex.append(r'[a-zA-Z0-9_]')
+        self.regex.append(r'\w')
         return self
 
     def anything(self):
