@@ -191,3 +191,16 @@ If you want to match tabs, but no other whitespace characters, this might be for
     True
     >>> not query.is_matching('    ')
     True
+
+### raw
+
+    raw "expression"
+
+Sometimes, you may want to enforce a specific part of a regular expression. You can do this by using raw. This will append the given string without escaping it.
+
+    >>> builder = Builder()
+    >>> query = builder.literally('an').whitespace().raw('[a-zA-Z]')
+    >>> print query.get()
+    (?:an)\s[a-zA-Z]
+    >>> query.is_matching('an Example')
+    True
