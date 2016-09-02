@@ -27,7 +27,7 @@ class Builder(object):
         return self
 
     def noCharacter(self):
-        self.regex.append(r'[^a-zA-Z0-9_]')
+        self.regex.append(r'\W')
         return self
 
     def uppercaseLetter(self):

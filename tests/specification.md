@@ -99,3 +99,18 @@ Just like a letter, `any character` matches anything between A to Z, 0 to 9 and 
     ^\w+$
     >>> query.is_matching('aBcD0_1')
     True
+
+no character
+
+    no character
+
+The inverse to the any character-character is no character. This will match everything except a to z, A to Z, 0 to 9 and `_`.
+
+    >>> builder = Builder()
+    >>> query = builder.startWith().noCharacter().onceOrMore().mustEnd()
+    >>> print query.get()
+    ^\W+$
+    >>> query.is_matching('/+$!')
+    True
+    >>> query.is_matching('azAZ09_')
+    False
