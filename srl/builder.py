@@ -26,6 +26,10 @@ class Builder(object):
         self.regex.append(r'[a-z]')
         return self
 
+    def letterFromTo(self, start, end):
+        self.regex.append(r'[%s-%s]' % (start, end))
+        return self
+
     def noCharacter(self):
         self.regex.append(r'[^a-zA-Z0-9_]')
         return self
@@ -180,7 +184,7 @@ class Builder(object):
     def is_matching(self, string):
         if not self.compiled:
             self.compile()
-        return self.compiled.match(string, self.flags)
+        return bool(self.compiled.match(string, self.flags))
 
     def split(self, string):
         if not self.compiled:
