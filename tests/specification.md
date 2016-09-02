@@ -52,3 +52,5 @@ The `literally` character allows you to pass a string to the query that will be 
     (?:sample)
     >>> query.findall('this is a sample')
     ['sample']
+    >>> query.findall('this is a maplecady')
+    []
