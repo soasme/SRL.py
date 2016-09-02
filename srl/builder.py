@@ -196,7 +196,9 @@ class Builder(object):
         return self.compiled.match(string, self.flags)
 
     def getMatches(self, string):
-        match = self.search(string)
+        if not self.compiled:
+            self.compile()
+        match = self.compiled.search(string)
         if match:
             return list(match.groups())
 

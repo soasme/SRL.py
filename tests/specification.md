@@ -304,3 +304,7 @@ If you're trying to get more than one match, capture names are useful, too. This
     (?P<first>.+)(?: - )(?P<second>(?:second part))
     >>> query.is_matching('first part - second part')
     True
+    >>> query.getMatches('first part - second part')
+    ['first part', 'second part']
+
+### 
