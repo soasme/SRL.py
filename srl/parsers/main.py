@@ -11,8 +11,26 @@ tokens = (
     'WHITESPACE',
     'LEFT_PARENTHESIS',
     'RIGHT_PARENTHESIS'
-    'NUMBER',
     'COMMA',
+    'NUMBER',
 )
 
+# Regular expression rules for tokens
 
+t_SINGLE_QUOTE = r"'"
+t_DOUBLE_QUOTE = r'"'
+t_WHITESPACE = r' '
+t_LEFT_PARENTHESIS = r'\('
+t_RIGHT_PARENTHESIS = r'\)'
+t_COMMA = r','
+
+def t_NUMBER(t):
+    r'\d+'
+    t.value = int(t.value)
+    return t
+
+
+# Define a rule so we can track line numbers
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
