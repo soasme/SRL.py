@@ -147,6 +147,20 @@ def p_expression_one_of(p):
     p[0] = p[0] or []
     p[0].append(('oneOf', (p[3][1:-1], )))
 
+def p_expression_letter(p):
+    '''expression : K_LETTER
+                  | K_LETTER K_FROM CHARACTER K_TO CHARACTER
+    '''
+    p[0] = p[0] or []
+    if len(p) == 6:
+        char_from = p[3]
+        char_to = p[5]
+    else:
+        char_from = 'a'
+        char_to = 'z'
+    p[0].append(('letter', (char_from, char_to, ), ))
+
+
 def parse(string):
     parser = yacc.yacc(debug=True)
     return parser.parse(string, lexer=lexer)
