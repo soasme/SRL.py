@@ -180,6 +180,11 @@ def p_expression_any_character(p):
     p[0] = p[0] or []
     p[0].append(('anyCharacter', ()))
 
+def p_expression_no_character(p):
+    'expression : K_NO K_CHARACTER'
+    p[0] = p[0] or []
+    p[0].append(('noCharacter', ()))
+
 def parse(string):
     parser = yacc.yacc(debug=True)
     return parser.parse(string, lexer=lexer)

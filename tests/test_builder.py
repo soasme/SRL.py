@@ -73,3 +73,4 @@ def test_parse():
     assert Builder.parse('letter from A to C').match('B')
     assert not Builder.parse('letter from A to C').match('D')
     assert Builder.parse('any character').match('a')
+    assert Builder.parse('no character').match(' ')
