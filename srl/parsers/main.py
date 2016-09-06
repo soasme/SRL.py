@@ -235,6 +235,14 @@ def p_expression_exactly_x_times(p):
     p[0] += p[1]
     p[0].append(('exactly', (p[3], )))
 
+def p_expression_between_x_and_y_times(p):
+    '''expression : expression K_BETWEEN NUMBER K_AND NUMBER K_TIMES
+                  | expression K_BETWEEN NUMBER K_AND NUMBER
+    '''
+    p[0] = p[0] or []
+    p[0] += p[1]
+    p[0].append(('between', (p[3], p[5], )))
+
 
 def parse(string):
     parser = yacc.yacc(debug=True)

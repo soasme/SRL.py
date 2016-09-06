@@ -85,3 +85,6 @@ def test_parse():
     assert not Builder.parse('raw "[a-z]"').match('A')
     assert Builder.parse('digit exactly 2 times').match('00')
     assert Builder.parse('digit exactly 2 times').match('000').group() == '00'
+    assert not Builder.parse('digit between 2 and 3 times').match('1')
+    assert Builder.parse('digit between 2 and 3 times').match('12')
+    assert Builder.parse('digit between 2 and 3').match('12')
