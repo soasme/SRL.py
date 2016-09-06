@@ -229,6 +229,13 @@ def p_expression_raw(p):
     p[0] = p[0] or []
     p[0].append(('raw', (p[2][1:-1], )))
 
+def p_expression_exactly_x_times(p):
+    'expression : expression K_EXACTLY NUMBER K_TIMES'
+    p[0] = p[0] or []
+    p[0] += p[1]
+    p[0].append(('exactly', (p[3], )))
+
+
 def parse(string):
     parser = yacc.yacc(debug=True)
     return parser.parse(string, lexer=lexer)

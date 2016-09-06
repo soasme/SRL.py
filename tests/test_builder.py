@@ -83,3 +83,5 @@ def test_parse():
     assert Builder.parse('tab').match('\t')
     assert Builder.parse('raw "[a-zA-Z]"').match('a')
     assert not Builder.parse('raw "[a-z]"').match('A')
+    assert Builder.parse('digit exactly 2 times').match('00')
+    assert Builder.parse('digit exactly 2 times').match('000').group() == '00'
