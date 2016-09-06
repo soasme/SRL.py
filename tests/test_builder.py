@@ -92,3 +92,5 @@ def test_parse():
     assert not Builder.parse('digit once or more').match('a')
     assert Builder.parse('digit once or more').match('1')
     assert Builder.parse('digit once or more').match('12')
+    assert Builder.parse('digit never or more').match('a')
+    assert Builder.parse('digit never or more').match('a1')
