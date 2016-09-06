@@ -13,11 +13,10 @@ requirements = [
 ]
 
 test_requirements = [
-    'pytest>=3.0',
 ]
 
 setup(
-    name='SRL.py',
+    name='SRL',
     version='0.1.0',
     description="Python Implement for Simple Regex.",
     long_description=readme + '\n\n' + history,
