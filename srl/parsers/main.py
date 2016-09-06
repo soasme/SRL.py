@@ -224,6 +224,11 @@ def p_expression_tab(p):
     p[0] = p[0] or []
     p[0].append(('tab', ()))
 
+def p_expression_raw(p):
+    'expression : K_RAW STRING'
+    p[0] = p[0] or []
+    p[0].append(('raw', (p[2][1:-1], )))
+
 def parse(string):
     parser = yacc.yacc(debug=True)
     return parser.parse(string, lexer=lexer)

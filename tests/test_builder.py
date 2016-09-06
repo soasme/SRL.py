@@ -81,3 +81,5 @@ def test_parse():
     assert Builder.parse('whitespace').match(' ')
     assert Builder.parse('no whitespace').match('a')
     assert Builder.parse('tab').match('\t')
+    assert Builder.parse('raw "[a-zA-Z]"').match('a')
+    assert not Builder.parse('raw "[a-z]"').match('A')
