@@ -185,6 +185,20 @@ def p_expression_no_character(p):
     p[0] = p[0] or []
     p[0].append(('noCharacter', ()))
 
+def p_expression_digit(p):
+    '''expression : K_DIGIT
+                  | K_DIGIT K_FROM NUMBER K_TO NUMBER
+    '''
+    p[0] = p[0] or []
+    if len(p) == 6:
+        num_from = p[3]
+        num_to= p[5]
+    else:
+        num_from = 0
+        num_to = 9
+    p[0].append(('digit', (num_from, num_to, ), ))
+
+
 def parse(string):
     parser = yacc.yacc(debug=True)
     return parser.parse(string, lexer=lexer)
