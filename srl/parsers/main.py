@@ -293,6 +293,24 @@ def p_expression_until(p):
     conditions = ('lambda', p[3])
     p[0].append(('until', (conditions, )))
 
+def p_expression_begin_with(p):
+    '''expression : K_BEGIN K_WITH
+                  | K_STARTS K_WITH
+                  | K_BEGIN K_WITH expression
+                  | K_STARTS K_WITH expression
+    '''
+    p[0] = p[0] or []
+    p[0].append(('beginWith', ()))
+    if len(p) == 4:
+        p[0] += p[3]
+
+def p_expression_must_end(p):
+    '''expression : K_MUST K_END
+                  | expression K_MUST K_END
+    '''
+    p[0] = p[0] or []
+    p[0].append(('mustEnd', ()))
+
 def parse(string):
     parser = yacc.yacc(debug=True)
     return parser.parse(string, lexer=lexer)
