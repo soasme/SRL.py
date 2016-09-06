@@ -77,3 +77,4 @@ def test_parse():
     assert Builder.parse('digit').match('0')
     assert not Builder.parse('anything').match('\n')
     assert Builder.parse('anything').match('-')
+    assert Builder.parse('new line').match('\n')
