@@ -51,7 +51,7 @@ tokens = (
     'K_ALREADY',
     'K_HAD',
     'K_CASE',
-    'K_SENSITIVE',
+    'K_INSENSITIVE',
     'K_MULTI',
     'K_ALL',
     'K_LAZY',
@@ -112,7 +112,7 @@ t_K_BY = r'by'
 t_K_ALREADY = r'already'
 t_K_HAD = r'had'
 t_K_CASE = r'case'
-t_K_SENSITIVE = r'sensitive'
+t_K_INSENSITIVE = r'insensitive'
 t_K_MULTI = r'multi'
 t_K_ALL = r'all'
 t_K_LAZY = r'lazy'
@@ -293,6 +293,26 @@ def p_expression_until(p):
     conditions = ('lambda', p[3])
     p[0].append(('until', (conditions, )))
 
+def p_expression_case_insensitive(p):
+    '''expression : expression K_CASE K_INSENSITIVE
+                  | expression K_CASE K_INSENSITIVE expression
+    '''
+    p[0] = []
+    p[0] += p[1]
+    p[0].append(('caseInsensitive', ()))
+    if len(p) == 5:
+        p[0] += p[4]
+
+def p_expression_multi_line(p):
+    '''expression : expression K_MULTI K_LINE
+                  | expression K_MULTI K_LINE expression
+    '''
+    p[0] = []
+    p[0] += p[1]
+    p[0].append(('multiLine', ()))
+    if len(p) == 5:
+        p[0] += p[4]
+
 def p_expression_begin_with(p):
     '''expression : K_BEGIN K_WITH
                   | K_STARTS K_WITH
@@ -309,6 +329,8 @@ def p_expression_must_end(p):
                   | expression K_MUST K_END
     '''
     p[0] = p[0] or []
+    if len(p) == 4:
+        p[0] += p[1]
     p[0].append(('mustEnd', ()))
 
 def parse(string):
