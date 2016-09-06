@@ -112,6 +112,12 @@ class Builder(object):
             subquery = builder.literally(conditions)
         elif callable(conditions):
             subquery = conditions(builder)
+        elif isinstance(conditions, tuple) and conditions[0] == 'lambda' and isinstance(conditions[1], list):
+            def callable_conditions(q):
+                for method, arg in conditions[1]:
+                    q = getattr(q, method)(*arg)
+                return q
+            subquery = callable_conditions(builder)
         else:
             subquery = builder.raw(conditions.get())
 

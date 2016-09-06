@@ -267,6 +267,15 @@ def p_expression_at_least_x_times(p):
     p[0] += p[1]
     p[0].append(('atLeast', (p[4], )))
 
+def p_expression_capture_as(p):
+    '''expression : K_CAPTURE LEFT_PARENTHESIS expression RIGHT_PARENTHESIS
+                  | K_CAPTURE LEFT_PARENTHESIS expression RIGHT_PARENTHESIS K_AS STRING
+    '''
+    p[0] = p[0] or []
+    name = p[6][1:-1] if len(p) == 7 else None
+    conditions = ('lambda', p[3])
+    p[0].append(('capture', (conditions, name)))
+
 
 def parse(string):
     parser = yacc.yacc(debug=True)
