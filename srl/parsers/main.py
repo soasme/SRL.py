@@ -34,3 +34,16 @@ def t_NUMBER(t):
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
+
+# A string containing ignored characters (spaces and tabs)
+t_ignore  = ' \t'
+
+class IllegalCharacter(Exception): pass
+
+# Error handling rule
+def t_error(t):
+    raise IllegalCharacter(t.value[0])
+    t.lexer.skip(1)
+
+# Build the lexer
+lexer = lex.lex()
