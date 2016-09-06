@@ -33,8 +33,8 @@ class Builder(object):
         self.regex.append(r'\W')
         return self
 
-    def uppercaseLetter(self):
-        self.regex.append(r'[A-Z]')
+    def uppercaseLetter(self, start='A', end='Z'):
+        self.regex.append(r'[%s-%s]' % (start, end, ))
         return self
 
     def anyCharacter(self):
@@ -261,6 +261,5 @@ class Builder(object):
         from .parsers.main import parse
         parsed = parse(string)
         for method, arg in parsed:
-            print arg
             builder = getattr(builder, method)(*arg)
         return builder.compile().compiled

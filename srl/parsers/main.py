@@ -160,6 +160,18 @@ def p_expression_letter(p):
         char_to = 'z'
     p[0].append(('letter', (char_from, char_to, ), ))
 
+def p_expression_uppercase_letter(p):
+    '''expression : K_UPPERCASE K_LETTER
+                  | K_UPPERCASE K_LETTER K_FROM CHARACTER K_TO CHARACTER
+    '''
+    p[0] = p[0] or []
+    if len(p) == 7:
+        char_from = p[4]
+        char_to = p[6]
+    else:
+        char_from = 'A'
+        char_to = 'Z'
+    p[0].append(('letter', (char_from, char_to, ), ))
 
 def parse(string):
     parser = yacc.yacc(debug=True)
