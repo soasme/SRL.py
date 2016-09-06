@@ -142,9 +142,11 @@ def p_expression_literally(p):
     p[0] = p[0] or []
     p[0].append(('literally', (p[2][1:-1], )))
 
+def p_expression_one_of(p):
+    'expression : K_ONE K_OF STRING'
+    p[0] = p[0] or []
+    p[0].append(('oneOf', (p[3][1:-1], )))
 
 def parse(string):
     parser = yacc.yacc(debug=True)
     return parser.parse(string, lexer=lexer)
-
-print parse('one of "abc"')

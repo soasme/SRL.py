@@ -65,3 +65,4 @@ def test_raw():
 
 def test_parse():
     assert Builder.parse('literally "abc"').match('abc')
+    assert Builder.parse('one of "abc"').match('a')
