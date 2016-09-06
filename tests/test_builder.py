@@ -94,3 +94,5 @@ def test_parse():
     assert Builder.parse('digit once or more').match('12')
     assert Builder.parse('digit never or more').match('a')
     assert Builder.parse('digit never or more').match('a1')
+    assert not Builder.parse('digit at least 2 times').match('1')
+    assert Builder.parse('digit at least 2 times').match('11')

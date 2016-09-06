@@ -261,6 +261,13 @@ def p_expression_never_or_more(p):
     p[0] += p[1]
     p[0].append(('neverOrMore', ()))
 
+def p_expression_at_least_x_times(p):
+    'expression : expression K_AT K_LEAST NUMBER K_TIMES'
+    p[0] = p[0] or []
+    p[0] += p[1]
+    p[0].append(('atLeast', (p[4], )))
+
+
 def parse(string):
     parser = yacc.yacc(debug=True)
     return parser.parse(string, lexer=lexer)
