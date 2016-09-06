@@ -80,3 +80,4 @@ def test_parse():
     assert Builder.parse('new line').match('\n')
     assert Builder.parse('whitespace').match(' ')
     assert Builder.parse('no whitespace').match('a')
+    assert Builder.parse('tab').match('\t')

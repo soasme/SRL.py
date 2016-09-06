@@ -219,6 +219,11 @@ def p_expression_whitespace(p):
     else:
         p[0].append(('whitespace', ()))
 
+def p_expression_tab(p):
+    'expression : K_TAB'
+    p[0] = p[0] or []
+    p[0].append(('tab', ()))
+
 def parse(string):
     parser = yacc.yacc(debug=True)
     return parser.parse(string, lexer=lexer)
