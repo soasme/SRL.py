@@ -88,3 +88,4 @@ def test_parse():
     assert not Builder.parse('digit between 2 and 3 times').match('1')
     assert Builder.parse('digit between 2 and 3 times').match('12')
     assert Builder.parse('digit between 2 and 3').match('12')
+    assert Builder.parse('digit optional').match('a')

@@ -243,6 +243,12 @@ def p_expression_between_x_and_y_times(p):
     p[0] += p[1]
     p[0].append(('between', (p[3], p[5], )))
 
+def p_expression_optional(p):
+    'expression : expression K_OPTIONAL'
+    p[0] = p[0] or []
+    p[0] += p[1]
+    p[0].append(('optional', ()))
+
 
 def parse(string):
     parser = yacc.yacc(debug=True)
