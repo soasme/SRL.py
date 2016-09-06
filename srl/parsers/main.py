@@ -249,6 +249,12 @@ def p_expression_optional(p):
     p[0] += p[1]
     p[0].append(('optional', ()))
 
+def p_expression_once_or_more(p):
+    'expression : expression K_ONCE K_OR K_MORE'
+    p[0] = p[0] or []
+    p[0] += p[1]
+    p[0].append(('onceOrMore', ()))
+
 
 def parse(string):
     parser = yacc.yacc(debug=True)
