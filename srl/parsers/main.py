@@ -209,6 +209,16 @@ def p_expression_new_line(p):
     p[0] = p[0] or []
     p[0].append(('newLine', ()))
 
+def p_expression_whitespace(p):
+    '''expression : K_WHITESPACE
+                  | K_NO K_WHITESPACE
+    '''
+    p[0] = p[0] or []
+    if len(p) == 3:
+        p[0].append(('noWhitespace', ()))
+    else:
+        p[0].append(('whitespace', ()))
+
 def parse(string):
     parser = yacc.yacc(debug=True)
     return parser.parse(string, lexer=lexer)

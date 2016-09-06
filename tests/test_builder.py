@@ -78,3 +78,5 @@ def test_parse():
     assert not Builder.parse('anything').match('\n')
     assert Builder.parse('anything').match('-')
     assert Builder.parse('new line').match('\n')
+    assert Builder.parse('whitespace').match(' ')
+    assert Builder.parse('no whitespace').match('a')
