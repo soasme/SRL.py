@@ -7,7 +7,7 @@ import yacc
 tokens = (
     # Symbols
     'LEFT_PARENTHESIS',
-    'RIGHT_PARENTHESIS'
+    'RIGHT_PARENTHESIS',
     'COMMA',
     'NUMBER',
     'CHARACTER',
@@ -26,7 +26,7 @@ tokens = (
     'K_DIGIT',
     'K_ANYTHING',
     'K_NEW',
-    'K_LINE'
+    'K_LINE',
     'K_WHITESPACE',
     'K_TAB',
     'K_RAW',
@@ -54,7 +54,7 @@ tokens = (
     'K_MULTI',
     'K_ALL',
     'K_LAZY',
-    'K_BEGIN'
+    'K_BEGIN',
     'K_STARTS',
     'K_WITH',
     'K_MUST',
@@ -72,7 +72,6 @@ def t_NUMBER(t):
     t.value = int(t.value)
     return t
 
-t_CHARACTER = r'[a-zA-Z0-9]'
 t_STRING = r'\"([^\\\n]|(\\.))*?\"'
 t_K_LITERALLY = r'literally'
 t_K_ONE = r'one'
@@ -120,5 +119,25 @@ t_K_WITH = r'with'
 t_K_MUST = r'must'
 t_K_END = r'end'
 
+# Define a rule so we can track line numbers
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
+
+# A string containing ignored characters (spaces and tabs)
+t_ignore  = ' ,\t'
+
+t_CHARACTER = r'.'
+
+# Error handling rule
+def t_error(t):
+    print("Illegal character '%s'" % t.value[0])
+    t.lexer.skip(1)
+
 # Build the lexer
 lexer = lex.lex()
+
+lexer.input('from 1 to 0')
+print lexer.token()
+print lexer.token()
+print lexer.token()
