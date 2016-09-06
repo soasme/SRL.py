@@ -198,6 +198,11 @@ def p_expression_digit(p):
         num_to = 9
     p[0].append(('digit', (num_from, num_to, ), ))
 
+def p_expression_anything(p):
+    'expression : K_ANYTHING'
+    p[0] = p[0] or []
+    p[0].append(('anything', ()))
+
 
 def parse(string):
     parser = yacc.yacc(debug=True)

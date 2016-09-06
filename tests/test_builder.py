@@ -75,3 +75,5 @@ def test_parse():
     assert Builder.parse('any character').match('a')
     assert Builder.parse('no character').match(' ')
     assert Builder.parse('digit').match('0')
+    assert not Builder.parse('anything').match('\n')
+    assert Builder.parse('anything').match('-')
