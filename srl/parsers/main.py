@@ -59,6 +59,7 @@ tokens = (
     'K_WITH',
     'K_MUST',
     'K_END',
+    'K_CHARACTER',
 
 )
 
@@ -118,6 +119,7 @@ t_K_STARTS = r'starts'
 t_K_WITH = r'with'
 t_K_MUST = r'must'
 t_K_END = r'end'
+t_K_CHARACTER = r'character'
 
 # Define a rule so we can track line numbers
 def t_newline(t):
@@ -172,6 +174,11 @@ def p_expression_uppercase_letter(p):
         char_from = 'A'
         char_to = 'Z'
     p[0].append(('letter', (char_from, char_to, ), ))
+
+def p_expression_any_character(p):
+    'expression : K_ANY K_CHARACTER'
+    p[0] = p[0] or []
+    p[0].append(('anyCharacter', ()))
 
 def parse(string):
     parser = yacc.yacc(debug=True)
