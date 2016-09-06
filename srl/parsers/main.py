@@ -22,6 +22,7 @@ tokens = (
     'K_TO',
     'K_UPPERCASE',
     'K_ANY',
+    'K_EITHER',
     'K_NO',
     'K_DIGIT',
     'K_ANYTHING',
@@ -82,6 +83,7 @@ t_K_FROM = r'from'
 t_K_TO = r'to'
 t_K_UPPERCASE = r'uppercase'
 t_K_ANY = r'any'
+t_K_EITHER = r'either'
 t_K_NO = r'no'
 t_K_DIGIT = r'digit'
 t_K_ANYTHING = r'anything'
@@ -276,6 +278,13 @@ def p_expression_capture_as(p):
     conditions = ('lambda', p[3])
     p[0].append(('capture', (conditions, name)))
 
+def p_expression_any_of(p):
+    '''expression : K_ANY K_OF LEFT_PARENTHESIS expression RIGHT_PARENTHESIS
+                  | K_EITHER K_OF LEFT_PARENTHESIS expression RIGHT_PARENTHESIS
+    '''
+    p[0] = p[0] or []
+    conditions = ('lambda', p[4])
+    p[0].append(('anyOf', (conditions, )))
 
 def parse(string):
     parser = yacc.yacc(debug=True)

@@ -98,3 +98,4 @@ def test_parse():
     assert Builder.parse('digit at least 2 times').match('11')
     assert Builder.parse('capture (digit once or more)').match('1').groups() == ('1', )
     assert Builder.parse('capture (digit once or more) as "mydigit"').match('1').groups() == ('1', )
+    assert Builder.parse('any of (literally "sample")').match('sample')
