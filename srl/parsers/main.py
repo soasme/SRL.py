@@ -286,6 +286,13 @@ def p_expression_any_of(p):
     conditions = ('lambda', p[4])
     p[0].append(('anyOf', (conditions, )))
 
+def p_expression_until(p):
+    '''expression : K_UNTIL LEFT_PARENTHESIS expression RIGHT_PARENTHESIS
+    '''
+    p[0] = p[0] or []
+    conditions = ('lambda', p[3])
+    p[0].append(('until', (conditions, )))
+
 def parse(string):
     parser = yacc.yacc(debug=True)
     return parser.parse(string, lexer=lexer)

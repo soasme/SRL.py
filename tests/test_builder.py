@@ -99,3 +99,4 @@ def test_parse():
     assert Builder.parse('capture (digit once or more)').match('1').groups() == ('1', )
     assert Builder.parse('capture (digit once or more) as "mydigit"').match('1').groups() == ('1', )
     assert Builder.parse('any of (literally "sample")').match('sample')
+    #assert Builder.parse('capture (anything once or more) until "m"').match('example')
