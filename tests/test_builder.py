@@ -102,3 +102,4 @@ def test_parse():
     #assert Builder.parse('capture (anything once or more) until "m"').match('example')
     assert Builder.parse('begin with must end').match('')
     assert Builder.parse('letter case insensitive').match('A')
+    assert Builder.parse('capture (letter once or more) all lazy').match('a')

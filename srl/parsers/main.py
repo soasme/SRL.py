@@ -313,6 +313,17 @@ def p_expression_multi_line(p):
     if len(p) == 5:
         p[0] += p[4]
 
+
+def p_expression_all_lazy(p):
+    '''expression : expression K_ALL K_LAZY
+                  | expression K_ALL K_LAZY expression
+    '''
+    p[0] = []
+    p[0] += p[1]
+    p[0].append(('allLazy', ()))
+    if len(p) == 5:
+        p[0] += p[4]
+
 def p_expression_begin_with(p):
     '''expression : K_BEGIN K_WITH
                   | K_STARTS K_WITH
