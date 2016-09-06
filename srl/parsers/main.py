@@ -119,3 +119,6 @@ t_K_STARTS = r'starts'
 t_K_WITH = r'with'
 t_K_MUST = r'must'
 t_K_END = r'end'
+
+# Build the lexer
+lexer = lex.lex()
