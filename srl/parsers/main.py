@@ -4,13 +4,62 @@ import lex
 import yacc
 
 # List of token names.
-
 tokens = (
+    # Symbols
     'LEFT_PARENTHESIS',
     'RIGHT_PARENTHESIS'
     'COMMA',
     'NUMBER',
+    'CHARACTER',
     'STRING',
+
+    # Keywords
+    'K_LITERALLY',
+    'K_ONE',
+    'K_OF',
+    'K_LETTER',
+    'K_FROM',
+    'K_TO',
+    'K_UPPERCASE',
+    'K_ANY',
+    'K_NO',
+    'K_DIGIT',
+    'K_ANYTHING',
+    'K_NEW',
+    'K_LINE'
+    'K_WHITESPACE',
+    'K_TAB',
+    'K_RAW',
+    'K_EXACTLY',
+    'K_TIMES',
+    'K_BETWEEN',
+    'K_AND',
+    'K_OPTIONAL',
+    'K_ONCE',
+    'K_NEVER',
+    'K_OR',
+    'K_MORE',
+    'K_AT',
+    'K_LEAST',
+    'K_AS',
+    'K_UNTIL',
+    'K_CAPTURE',
+    'K_IF',
+    'K_FOLLOWED',
+    'K_BY',
+    'K_ALREADY',
+    'K_HAD',
+    'K_CASE',
+    'K_SENSITIVE',
+    'K_MULTI',
+    'K_ALL',
+    'K_LAZY',
+    'K_BEGIN'
+    'K_STARTS',
+    'K_WITH',
+    'K_MUST',
+    'K_END',
+
 )
 
 # Regular expression rules for tokens
@@ -23,22 +72,50 @@ def t_NUMBER(t):
     t.value = int(t.value)
     return t
 
+t_CHARACTER = r'[a-zA-Z0-9]'
 t_STRING = r'\"([^\\\n]|(\\.))*?\"'
-
-# Define a rule so we can track line numbers
-def t_newline(t):
-    r'\n+'
-    t.lexer.lineno += len(t.value)
-
-# A string containing ignored characters (spaces, comma and tabs)
-t_ignore  = ' ,\t'
-
-class IllegalCharacter(Exception): pass
-
-# Error handling rule
-def t_error(t):
-    raise IllegalCharacter(t.value[0])
-    t.lexer.skip(1)
-
-# Build the lexer
-lexer = lex.lex()
+t_K_LITERALLY = r'literally'
+t_K_ONE = r'one'
+t_K_OF = r'of'
+t_K_LETTER = r'letter'
+t_K_FROM = r'from'
+t_K_TO = r'to'
+t_K_UPPERCASE = r'uppercase'
+t_K_ANY = r'any'
+t_K_NO = r'no'
+t_K_DIGIT = r'digit'
+t_K_ANYTHING = r'anything'
+t_K_NEW = r'new'
+t_K_LINE = r'line'
+t_K_WHITESPACE = r'whitespace'
+t_K_TAB = r'tab'
+t_K_RAW = r'raw'
+t_K_EXACTLY = r'exactly'
+t_K_TIMES = r'times'
+t_K_BETWEEN = r'between'
+t_K_AND = r'and'
+t_K_OPTIONAL = r'optional'
+t_K_ONCE = r'once'
+t_K_NEVER = r'never'
+t_K_OR = r'or'
+t_K_MORE = r'more'
+t_K_AT = r'at'
+t_K_LEAST = r'least'
+t_K_AS = r'as'
+t_K_UNTIL = r'until'
+t_K_CAPTURE = r'capture'
+t_K_IF = r'if'
+t_K_FOLLOWED = r'followed'
+t_K_BY = r'by'
+t_K_ALREADY = r'already'
+t_K_HAD = r'had'
+t_K_CASE = r'case'
+t_K_SENSITIVE = r'sensitive'
+t_K_MULTI = r'multi'
+t_K_ALL = r'all'
+t_K_LAZY = r'lazy'
+t_K_BEGIN = r'begin'
+t_K_STARTS = r'starts'
+t_K_WITH = r'with'
+t_K_MUST = r'must'
+t_K_END = r'end'
