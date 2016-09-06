@@ -254,3 +254,13 @@ class Builder(object):
         return self.compiled.subn(repl, string, self.flags)
 
     filter = subn
+
+    @classmethod
+    def parse(cls, string):
+        builder = cls()
+        from .parsers.main import parse
+        parsed = parse(string)
+        for method, arg in parsed:
+            print arg
+            builder = getattr(builder, method)(*arg)
+        return builder.compile().compiled

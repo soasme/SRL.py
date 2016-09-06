@@ -137,7 +137,14 @@ def t_error(t):
 # Build the lexer
 lexer = lex.lex()
 
-lexer.input('from 1 to 0')
-print lexer.token()
-print lexer.token()
-print lexer.token()
+def p_expression_literally(p):
+    'expression : K_LITERALLY STRING'
+    p[0] = p[0] or []
+    p[0].append(('literally', (p[2][1:-1], )))
+
+
+def parse(string):
+    parser = yacc.yacc(debug=True)
+    return parser.parse(string, lexer=lexer)
+
+print parse('one of "abc"')

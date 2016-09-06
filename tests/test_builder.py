@@ -62,3 +62,6 @@ def test_laziness():
 
 def test_raw():
     assert Builder().literally('foo').raw('b[a-z]r').is_valid()
+
+def test_parse():
+    assert Builder.parse('literally "abc"').match('abc')
