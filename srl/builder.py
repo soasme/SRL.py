@@ -3,6 +3,8 @@
 import re
 import copy
 
+from .parsers.parse import parse
+
 class LazyError(Exception): pass
 
 class Builder(object):
@@ -264,7 +266,6 @@ class Builder(object):
     @classmethod
     def parse(cls, string):
         builder = cls()
-        from .parsers.main import parse
         parsed = parse(string)
         for method, arg in parsed:
             builder = getattr(builder, method)(*arg)
