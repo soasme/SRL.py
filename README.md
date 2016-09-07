@@ -9,13 +9,12 @@ TODO
 
 ## How to use
 
-```python
->>> from srl import SRL
->>> regex_object = SRL('digit exactly 3 times')
->>> matched = regex_object.search('123') # Exactly same API with class re.RegexObject
->>> matched.group()
-'123'
-```
+    >>> from srl import SRL
+    >>> regex_object = SRL('digit exactly 3 times')
+    >>> matched = regex_object.search('123') # Exactly same API with class re.RegexObject
+    >>> matched.group()
+    '123'
+
 ## How to test
 
 ```python

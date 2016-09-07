@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import lex
-import yacc
+from ..utils import lex
+from ..utils import yacc
 
 # List of token names.
 tokens = (
