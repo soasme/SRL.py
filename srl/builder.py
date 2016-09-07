@@ -267,6 +267,8 @@ class Builder(object):
     def parse(cls, string):
         builder = cls()
         parsed = parse(string)
+        if not parsed:
+            raise Exception('Invalid Simple Regex')
         for method, arg in parsed:
             builder = getattr(builder, method)(*arg)
         return builder.compile().compiled

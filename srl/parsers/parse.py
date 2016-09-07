@@ -141,21 +141,44 @@ def t_error(t):
 # Build the lexer
 lexer = lex.lex()
 
-def p_expression_literally(p):
-    'expression : K_LITERALLY STRING'
-    p[0] = p[0] or []
-    p[0].append(('literally', (p[2][1:-1], )))
-
-def p_expression_one_of(p):
-    'expression : K_ONE K_OF STRING'
-    p[0] = p[0] or []
-    p[0].append(('oneOf', (p[3][1:-1], )))
-
-def p_expression_letter(p):
-    '''expression : K_LETTER
-                  | K_LETTER K_FROM CHARACTER K_TO CHARACTER
+def p_character_with_quantifier(p):
+    '''character : character quantifier
     '''
-    p[0] = p[0] or []
+    p[0] = []
+    p[0] += p[1]
+    p[0] += p[2]
+
+def p_character_with_anchor(p):
+    '''character : character anchor
+                 | anchor character
+                 | anchor anchor
+                 | character flag
+    '''
+    p[0] = []
+    p[0] += p[1]
+    p[0] += p[2]
+
+def p_character_with_quantfier_and_anchor(p):
+    '''character : character quantifier anchor
+    '''
+    p[0] = []
+    p[0] += p[1]
+    p[0] += p[2]
+    p[0] += p[3]
+
+def p_character_literally(p):
+    'character : K_LITERALLY STRING'
+    p[0] = [('literally', (p[2][1:-1], ))]
+
+def p_character_one_of(p):
+    'character : K_ONE K_OF STRING'
+    p[0] = [('oneOf', (p[3][1:-1], ))]
+
+def p_character_letter(p):
+    '''character : K_LETTER
+                 | K_LETTER K_FROM CHARACTER K_TO CHARACTER
+    '''
+    p[0] = []
     if len(p) == 6:
         char_from = p[3]
         char_to = p[5]
@@ -164,9 +187,9 @@ def p_expression_letter(p):
         char_to = 'z'
     p[0].append(('letter', (char_from, char_to, ), ))
 
-def p_expression_uppercase_letter(p):
-    '''expression : K_UPPERCASE K_LETTER
-                  | K_UPPERCASE K_LETTER K_FROM CHARACTER K_TO CHARACTER
+def p_character_uppercase_letter(p):
+    '''character : K_UPPERCASE K_LETTER
+                 | K_UPPERCASE K_LETTER K_FROM CHARACTER K_TO CHARACTER
     '''
     p[0] = p[0] or []
     if len(p) == 7:
@@ -177,19 +200,17 @@ def p_expression_uppercase_letter(p):
         char_to = 'Z'
     p[0].append(('letter', (char_from, char_to, ), ))
 
-def p_expression_any_character(p):
-    'expression : K_ANY K_CHARACTER'
-    p[0] = p[0] or []
-    p[0].append(('anyCharacter', ()))
+def p_character_any_character(p):
+    'character : K_ANY K_CHARACTER'
+    p[0] = [('anyCharacter', ())]
 
-def p_expression_no_character(p):
-    'expression : K_NO K_CHARACTER'
-    p[0] = p[0] or []
-    p[0].append(('noCharacter', ()))
+def p_character_no_character(p):
+    'character : K_NO K_CHARACTER'
+    p[0] = [('noCharacter', ())]
 
-def p_expression_digit(p):
-    '''expression : K_DIGIT
-                  | K_DIGIT K_FROM NUMBER K_TO NUMBER
+def p_character_digit(p):
+    '''character : K_DIGIT
+                 | K_DIGIT K_FROM NUMBER K_TO NUMBER
     '''
     p[0] = p[0] or []
     if len(p) == 6:
@@ -200,150 +221,134 @@ def p_expression_digit(p):
         num_to = 9
     p[0].append(('digit', (num_from, num_to, ), ))
 
-def p_expression_anything(p):
-    'expression : K_ANYTHING'
-    p[0] = p[0] or []
-    p[0].append(('anything', ()))
+def p_character_anything(p):
+    'character : K_ANYTHING'
+    p[0] = [('anything', ())]
 
+def p_character_new_line(p):
+    'character : K_NEW K_LINE'
+    p[0] = [('newLine', ())]
 
-def p_expression_new_line(p):
-    'expression : K_NEW K_LINE'
-    p[0] = p[0] or []
-    p[0].append(('newLine', ()))
-
-def p_expression_whitespace(p):
-    '''expression : K_WHITESPACE
-                  | K_NO K_WHITESPACE
+def p_character_whitespace(p):
+    '''character : K_WHITESPACE
     '''
-    p[0] = p[0] or []
-    if len(p) == 3:
-        p[0].append(('noWhitespace', ()))
-    else:
-        p[0].append(('whitespace', ()))
+    p[0] = [('whitespace', ())]
 
-def p_expression_tab(p):
-    'expression : K_TAB'
-    p[0] = p[0] or []
-    p[0].append(('tab', ()))
+def p_character_no_whitespace(p):
+    'character : K_NO K_WHITESPACE'
+    p[0] = [('noWhitespace', ())]
 
-def p_expression_raw(p):
-    'expression : K_RAW STRING'
-    p[0] = p[0] or []
-    p[0].append(('raw', (p[2][1:-1], )))
+def p_character_tab(p):
+    'character : K_TAB'
+    p[0] = [('tab', ())]
 
-def p_expression_exactly_x_times(p):
-    'expression : expression K_EXACTLY NUMBER K_TIMES'
-    p[0] = p[0] or []
-    p[0] += p[1]
-    p[0].append(('exactly', (p[3], )))
+def p_character_raw(p):
+    'character : K_RAW STRING'
+    p[0] = [('raw', (p[2][1:-1], ))]
 
-def p_expression_between_x_and_y_times(p):
-    '''expression : expression K_BETWEEN NUMBER K_AND NUMBER K_TIMES
-                  | expression K_BETWEEN NUMBER K_AND NUMBER
+def p_quantifier_exactly_x_times(p):
+    'quantifier : K_EXACTLY NUMBER K_TIMES'
+    p[0] = [('exactly', (p[2], ))]
+
+def p_quantifier_between_x_and_y_times(p):
+    '''quantifier : K_BETWEEN NUMBER K_AND NUMBER K_TIMES
+                  | K_BETWEEN NUMBER K_AND NUMBER
     '''
-    p[0] = p[0] or []
-    p[0] += p[1]
-    p[0].append(('between', (p[3], p[5], )))
+    p[0] = [('between', (p[2], p[4], ))]
 
-def p_expression_optional(p):
-    'expression : expression K_OPTIONAL'
-    p[0] = p[0] or []
-    p[0] += p[1]
-    p[0].append(('optional', ()))
+def p_quantifier_optional(p):
+    'quantifier : K_OPTIONAL'
+    p[0] = [('optional', ())]
 
-def p_expression_once_or_more(p):
-    'expression : expression K_ONCE K_OR K_MORE'
-    p[0] = p[0] or []
-    p[0] += p[1]
-    p[0].append(('onceOrMore', ()))
+def p_quantifier_once_or_more(p):
+    'quantifier : K_ONCE K_OR K_MORE'
+    p[0] = [('onceOrMore', ())]
 
-def p_expression_never_or_more(p):
-    'expression : expression K_NEVER K_OR K_MORE'
-    p[0] = p[0] or []
-    p[0] += p[1]
-    p[0].append(('neverOrMore', ()))
+def p_quantifier_never_or_more(p):
+    'quantifier : K_NEVER K_OR K_MORE'
+    p[0] = [('neverOrMore', ())]
 
-def p_expression_at_least_x_times(p):
-    'expression : expression K_AT K_LEAST NUMBER K_TIMES'
-    p[0] = p[0] or []
-    p[0] += p[1]
-    p[0].append(('atLeast', (p[4], )))
+def p_quantifier_at_least_x_times(p):
+    'quantifier : K_AT K_LEAST NUMBER K_TIMES'
+    p[0] = [('atLeast', (p[3], ))]
 
-def p_expression_capture_as(p):
-    '''expression : K_CAPTURE LEFT_PARENTHESIS expression RIGHT_PARENTHESIS
-                  | K_CAPTURE LEFT_PARENTHESIS expression RIGHT_PARENTHESIS K_AS STRING
+
+def p_group_string(p):
+    'group : STRING'
+    p[0] = ('lambda', [('literally', (p[1][1:-1], ))])
+
+def p_group_subquery(p):
+    'group : LEFT_PARENTHESIS character RIGHT_PARENTHESIS'
+    p[0] = ('lambda', p[2])
+
+def p_character_capture(p):
+    'character : K_CAPTURE group'
+    p[0] = [('capture', (p[2], None))]
+
+def p_character_capture_as(p):
+    'character : K_CAPTURE group K_AS STRING'
+    p[0] = [('capture', (p[2], p[4][1:-1]))]
+
+def p_group_any_of(p):
+    '''character : K_ANY K_OF group
+                 | K_EITHER K_OF group
     '''
-    p[0] = p[0] or []
-    name = p[6][1:-1] if len(p) == 7 else None
-    conditions = ('lambda', p[3])
-    p[0].append(('capture', (conditions, name)))
+    p[0] = [('anyOf', (p[3], ))]
 
-def p_expression_any_of(p):
-    '''expression : K_ANY K_OF LEFT_PARENTHESIS expression RIGHT_PARENTHESIS
-                  | K_EITHER K_OF LEFT_PARENTHESIS expression RIGHT_PARENTHESIS
-    '''
-    p[0] = p[0] or []
-    conditions = ('lambda', p[4])
-    p[0].append(('anyOf', (conditions, )))
-
-def p_expression_until(p):
-    '''expression : K_UNTIL LEFT_PARENTHESIS expression RIGHT_PARENTHESIS
+def p_group_until(p):
+    '''group : K_UNTIL group
     '''
     p[0] = p[0] or []
     conditions = ('lambda', p[3])
     p[0].append(('until', (conditions, )))
 
-def p_expression_case_insensitive(p):
-    '''expression : expression K_CASE K_INSENSITIVE
-                  | expression K_CASE K_INSENSITIVE expression
+def p_flag_case_insensitive(p):
+    '''flag : K_CASE K_INSENSITIVE
     '''
-    p[0] = []
-    p[0] += p[1]
-    p[0].append(('caseInsensitive', ()))
-    if len(p) == 5:
-        p[0] += p[4]
+    p[0] = [('caseInsensitive', ())]
 
-def p_expression_multi_line(p):
-    '''expression : expression K_MULTI K_LINE
-                  | expression K_MULTI K_LINE expression
+def p_flag_multi_line(p):
+    '''flag : K_MULTI K_LINE
     '''
-    p[0] = []
-    p[0] += p[1]
-    p[0].append(('multiLine', ()))
-    if len(p) == 5:
-        p[0] += p[4]
+    p[0] = [('multiLine', ())]
 
-
-def p_expression_all_lazy(p):
-    '''expression : expression K_ALL K_LAZY
-                  | expression K_ALL K_LAZY expression
+def p_flag_all_lazy(p):
+    '''flag : K_ALL K_LAZY
     '''
-    p[0] = []
-    p[0] += p[1]
-    p[0].append(('allLazy', ()))
-    if len(p) == 5:
-        p[0] += p[4]
+    p[0] = [('allLazy', ())]
 
-def p_expression_begin_with(p):
-    '''expression : K_BEGIN K_WITH
-                  | K_STARTS K_WITH
-                  | K_BEGIN K_WITH expression
-                  | K_STARTS K_WITH expression
+def p_anchor_begin_with(p):
+    '''anchor : K_BEGIN K_WITH
+              | K_STARTS K_WITH
     '''
     p[0] = p[0] or []
     p[0].append(('beginWith', ()))
     if len(p) == 4:
         p[0] += p[3]
 
-def p_expression_must_end(p):
-    '''expression : K_MUST K_END
-                  | expression K_MUST K_END
+def p_anchor_must_end(p):
+    '''anchor : K_MUST K_END
     '''
     p[0] = p[0] or []
     if len(p) == 4:
         p[0] += p[1]
     p[0].append(('mustEnd', ()))
 
+def p_query_srl(p):
+    '''query : group
+             | character
+             | character quantifier
+    '''
+    p[0] = []
+    if len(p) == 2:
+        p[0] += p[1]
+    elif len(p) == 3:
+        p[0] += p[1]
+        p[0] += p[2]
+
+def p_error(p):
+    print("Syntax error in input!", p)
+
 def parse(string):
-    parser = yacc.yacc(debug=True)
-    return parser.parse(string, lexer=lexer)
+    parser = yacc.yacc(debug=False)
+    return parser.parse(string, lexer=lexer, tracking=False)

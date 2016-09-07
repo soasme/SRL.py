@@ -97,6 +97,7 @@ def test_parse():
     assert SRL('digit never or more').match('a1')
     assert not SRL('digit at least 2 times').match('1')
     assert SRL('digit at least 2 times').match('11')
+    assert SRL('capture "abc"').match('abc')
     assert SRL('capture (digit once or more)').match('1').groups() == ('1', )
     assert SRL('capture (digit once or more) as "mydigit"').match('1').groups() == ('1', )
     assert SRL('any of (literally "sample")').match('sample')
